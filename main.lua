@@ -76,8 +76,7 @@ function _init()
     for x = 0, 127 do
       if (mget(x, y) == 48) then
         player = make_player(x, y + 1, 1)
-        --TODO TEST
-        player.x = 120
+        player.x = 120 --TODO TEST
 
         if (num_players == 2) then
           player2 = make_player(x + 2, y + 1, 1)
@@ -583,6 +582,7 @@ function _update()
     while true do
       flip()
       debounce_t = debounce_t + 1
+      print_highscore_table(debounce_t)
       if (btn(4) or btn(5)) and debounce_t > 100 then break end
     end
     death_t = 30
@@ -694,7 +694,15 @@ function _draw()
   color(7)
 
   if (death_t > 60) then
-    local text = [[high scores!!
+    print_highscore_table()
+  else
+    print_metrics()
+  end
+end
+
+function print_highscore_table(tt)
+  tt = tt or t -- in case of `flip` loop, use param tt
+  local text = [[high scores!!
 rrm 100
 bbb 22
 bbb 22
@@ -709,14 +717,11 @@ bbb 22
 JELPI IS 10 YEARS OLD!
 press any key to continue
 ]] -- todo call API and diplay high scores
-    -- todod add date?
-    print(text,
-      18 - 1, 10 - 0, 8 + (t / 4) % 2)
-    print(text,
-      18, 10, 7)
-  else
-    print_metrics()
-  end
+  -- todod add date?
+  print(text,
+    18 - 1, 10 - 0, 8 + (tt / 4) % 2)
+  print(text,
+    18, 10, 7)
 end
 
 function print_metrics()
