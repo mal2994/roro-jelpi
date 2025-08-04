@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../vt/jelpi"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../panc-highscore"
+		}
+	],
+	"settings": {}
+}
