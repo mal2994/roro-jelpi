@@ -574,6 +574,7 @@ function _update()
 
   t = t + 1
 
+  -- if player wins
   if player.x >= 127 then
     print_metrics()
     print("")
@@ -584,6 +585,10 @@ function _update()
       debounce_t = debounce_t + 1
       print_highscore_table(debounce_t)
       if (btn(4) or btn(5)) and debounce_t > 100 then break end
+      -- TODO `btnp` doesnt work in this flip loop
+      -- need to take it back to _update to utilize pancelor code
+      -- you can break the existing fx and flow anyway you want
+      -- to be simple.
     end
     death_t = 30
     outgame_logic()
