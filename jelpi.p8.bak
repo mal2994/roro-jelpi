@@ -1,3 +1,6 @@
+-- the adventures of jelpi
+-- by zep
+
 -- to do:
 -- levels and monsters
 -- title / restart logic
@@ -9,24 +12,8 @@
 num_players = 1
 corrupt_mode = false
 max_actors = 128
+
 music(0, 0, 3)
-
--- read GPIO to get the high score table
-gpio = ""
-for i = 0x5f80, 0x5fff, 1 do
-  gpio = gpio .. peek(i)
-end
-
--- use GPIO or cartdata to initialize the high score table
-if false then
-  highscore.init(0x5f80)
-else
-  cartdata("jelpi-hs")
-  highscore.init()
-end
-
--- set the flag false to do normal jelpi gameplay
-game_over_screen = false
 
 
 function make_actor(k, x, y, d)
@@ -37,9 +24,9 @@ function make_actor(k, x, y, d)
   a.y = y
   a.dx = 0
   a.dy = 0
-  a.ddy = 0.06 -- gravity
+  a.ddy = 0.06   -- gravity
   a.w = 0.3
-  a.h = 0.5    -- half-width
+  a.h = 0.5      -- half-width
   a.d = d
   a.bounce = 0.8
   a.frame = 1
@@ -90,7 +77,6 @@ function _init()
     for x = 0, 127 do
       if (mget(x, y) == 48) then
         player = make_player(x, y + 1, 1)
-        player.x = 120 --TODO TEST
 
         if (num_players == 2) then
           player2 = make_player(x + 2, y + 1, 1)
@@ -571,12 +557,6 @@ function outgame_logic()
 end
 
 function _update()
-  if game_over_screen then
-    highscore.input.update()
-    return
-  end
-  time_race = flr(time() * 1000) / 1000
-
   foreach(actor, move_actor)
   foreach(sparkle, move_sparkle)
   collisions()
@@ -591,14 +571,6 @@ function _update()
   end
 
   t = t + 1
-
-  -- if player wins
-  if player.x >= 127 then
-    game_over_screen = 1
-    print_metrics()
-    death_t = 30
-    outgame_logic()
-  end -- TODO: call API and post data
 end
 
 function draw_sparkle(s)
@@ -643,18 +615,6 @@ function draw_actor(pl)
 end
 
 function _draw()
-  if game_over_screen == 1 then
-    cls()
-    print("congrats")
-    print(time_race)
-    highscore.input.draw()
-    if btnp(5) then game_over_screen = 2 end
-    return
-  elseif game_over_screen == 2 then
-    cls()
-    highscore.table.draw()
-    return
-  end
   printh(stat(11))
   -- sky
   camera(0, 0)
@@ -685,7 +645,7 @@ function _draw()
   local bgcol = 13 -- mountains
   pal(5, bgcol)
   pal(2, bgcol)
-  pal(13, 6) -- highlights
+  pal(13, 6)      -- highlights
   y = 0
   mapdraw(0, 32, 0, y, 16, 16, 0)
   pal()
@@ -717,53 +677,16 @@ function _draw()
   color(7)
 
   if (death_t > 60) then
-    game_over_screen = 1
-    -- print_highscore_table()
-  else
-    print_metrics()
+    print("press button to restart",
+      18 - 1, 10 - 0, 8 + (t / 4) % 2)
+    print("press button to restart",
+      18, 10, 7)
+  end
+
+  if (false) then
+    cursor(0, 2)
+    print("actors:" .. count(actor))
+    print("score:" .. player.score)
+    print(stat(1))
   end
 end
-
-function print_highscore_table(tt)
-  tt = tt or t -- in case of `flip` loop, use param tt
-  local text = [[high scores!!
-rrm 100
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-
-JELPI IS 10 YEARS OLD!
-press any key to continue
-]] -- todo call API and diplay high scores
-  -- todod add date?
-  print(text,
-    18 - 1, 10 - 0, 8 + (tt / 4) % 2)
-  print(text,
-    18, 10, 7)
-end
-
-function print_metrics()
-  cursor(0, 2)
-  print("actors:" .. count(actor))
-  print("score:" .. player.score)
-  print("cpu:" .. stat(1))
-  print("time:" .. time_race)
-end
-
---[[
-blob storage read/write token
-vtwn_3wlff1nopfeuh8mfbs3ymyd2hkvq
-]]
-
---[[
-want it to be simple.
-call hs input at first
-get the name and reset the cart so that the timer is accurate
-then at the end do x thing
-]]

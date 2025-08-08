@@ -4,9 +4,9 @@ __lua__
 -- the adventures of jelpi
 -- by zep
 
-#include ../panc-highscore/lib/highscore.lua
-#include ../panc-highscore/lib/highscore.input.lua
-#include ../panc-highscore/lib/highscore.table.lua
+#include panc-highscore/lib/highscore.lua
+#include panc-highscore/lib/highscore.input.lua
+#include panc-highscore/lib/highscore.table.lua
 #include main.lua
 
 
