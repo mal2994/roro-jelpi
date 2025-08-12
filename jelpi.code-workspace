@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../panc-highscore"
+		},
+		{
+			"path": "../../../.lexaloffle/pico-8/cdata"
 		}
 	],
 	"settings": {}
