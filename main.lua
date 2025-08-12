@@ -100,7 +100,7 @@ function _init()
     for x = 0, 127 do
       if (mget(x, y) == 48) then
         player = make_player(x, y + 1, 1)
-        player.x = 120 --TODO TEST
+        -- player.x = 120 --TODO TEST
 
         if (num_players == 2) then
           player2 = make_player(x + 2, y + 1, 1)
@@ -581,11 +581,16 @@ function outgame_logic()
 end
 
 function _update()
-  if game_over_screen then
+  if game_over_screen == "new record" then
     highscore.input.update()
     if btnp(5) then
       highscore.add(highscore.input.name, time_race)
       game_over_screen = "show records"
+    end
+    return
+  elseif game_over_screen == "show records" then
+    if btnp(5) then
+      run() -- reset cart
     end
     return
   end
