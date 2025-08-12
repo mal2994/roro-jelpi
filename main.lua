@@ -11,17 +11,27 @@ corrupt_mode = false
 max_actors = 128
 music(0, 0, 3)
 
--- read GPIO to get the high score table
-gpio = ""
-for i = 0x5f80, 0x5fff, 1 do
-  gpio = gpio .. peek(i)
-end
+-- read GPIO to get the high score table -- this should not be required
+-- gpio = ""
+-- for i = 0x5f80, 0x5fff, 1 do
+-- gpio = gpio .. peek(i)
+-- end
 
 -- use GPIO or cartdata to initialize the high score table
+-- GPIO is 128 bytes starting at 0x5f80, cartdata is 256 bytes starting at 0x5e00.
+-- I THINK the format is similar to the gfx format -- nibbles are written in the text blob.
+-- for example: hexidecimal 1A is decimal 26.
+-- I THINK the highscore table uses 48 bytes or 96 nibbles.
+-- but since jelpi requires more precise data, it will end up being more bytes.
+-- how to decode:
+-- 23180117
+-- 0x23 is 35. 18,01,17 is WAX
 if false then
   highscore.init(0x5f80)
 else
   cartdata("jelpi-hs")
+  -- highscore.reset()
+  -- _hs_save()
   highscore.init()
 end
 
@@ -573,6 +583,10 @@ end
 function _update()
   if game_over_screen then
     highscore.input.update()
+    if btnp(5) then
+      highscore.add(highscore.input.name, time_race)
+      game_over_screen = "show records"
+    end
     return
   end
   time_race = flr(time() * 1000) / 1000
@@ -594,10 +608,14 @@ function _update()
 
   -- if player wins
   if player.x >= 127 then
-    game_over_screen = 1
-    print_metrics()
-    death_t = 30
-    outgame_logic()
+    if highscore.index(time_race) then
+      game_over_screen = "new record"
+    else
+      game_over_screen = "show records"
+    end
+    -- print_metrics()
+    -- death_t = 30
+    -- outgame_logic()
   end -- TODO: call API and post data
 end
 
@@ -643,14 +661,13 @@ function draw_actor(pl)
 end
 
 function _draw()
-  if game_over_screen == 1 then
+  if game_over_screen == "new record" then
     cls()
-    print("congrats")
+    print("new record!")
     print(time_race)
     highscore.input.draw()
-    if btnp(5) then game_over_screen = 2 end
     return
-  elseif game_over_screen == 2 then
+  elseif game_over_screen == "show records" then
     cls()
     highscore.table.draw()
     return
@@ -717,7 +734,7 @@ function _draw()
   color(7)
 
   if (death_t > 60) then
-    game_over_screen = 1
+    game_over_screen = "new record"
     -- print_highscore_table()
   else
     print_metrics()
@@ -753,7 +770,7 @@ function print_metrics()
   print("actors:" .. count(actor))
   print("score:" .. player.score)
   print("cpu:" .. stat(1))
-  print("time:" .. time_race)
+  print("time race:" .. time_race)
 end
 
 --[[

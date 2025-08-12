@@ -8,6 +8,7 @@ __lua__
 #include panc-highscore/lib/highscore.input.lua
 #include panc-highscore/lib/highscore.table.lua
 #include main.lua
+#include rxi-inspect/dinsp.p8
 
 
 
