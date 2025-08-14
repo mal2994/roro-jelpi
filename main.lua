@@ -11,27 +11,15 @@ corrupt_mode = false
 max_actors = 128
 music(0, 0, 3)
 
--- read GPIO to get the high score table -- this should not be required
--- gpio = ""
--- for i = 0x5f80, 0x5fff, 1 do
--- gpio = gpio .. peek(i)
--- end
-
--- use GPIO or cartdata to initialize the high score table
--- GPIO is 128 bytes starting at 0x5f80, cartdata is 256 bytes starting at 0x5e00.
--- I THINK the format is similar to the gfx format -- nibbles are written in the text blob.
--- for example: hexidecimal 1A is decimal 26.
--- I THINK the highscore table uses 48 bytes or 96 nibbles.
--- but since jelpi requires more precise data, it will end up being more bytes.
 -- how to decode:
 -- 23180117
 -- 0x23 is 35. 18,01,17 is WAX
-if false then
+-- now i bumped it to 32 bit nums stored
+if true then
+  -- online multiplayer
   highscore.init(0x5f80)
 else
   cartdata("jelpi-hs")
-  -- highscore.reset()
-  -- _hs_save()
   highscore.init()
 end
 
@@ -739,35 +727,11 @@ function _draw()
   color(7)
 
   if (death_t > 60) then
-    game_over_screen = "new record"
+    game_over_screen = "show records"
     -- print_highscore_table()
   else
     print_metrics()
   end
-end
-
-function print_highscore_table(tt)
-  tt = tt or t -- in case of `flip` loop, use param tt
-  local text = [[high scores!!
-rrm 100
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-bbb 22
-
-JELPI IS 10 YEARS OLD!
-press any key to continue
-]] -- todo call API and diplay high scores
-  -- todod add date?
-  print(text,
-    18 - 1, 10 - 0, 8 + (tt / 4) % 2)
-  print(text,
-    18, 10, 7)
 end
 
 function print_metrics()
@@ -775,17 +739,10 @@ function print_metrics()
   print("actors:" .. count(actor))
   print("score:" .. player.score)
   print("cpu:" .. stat(1))
-  print("time race:" .. time_race)
+  print("time:" .. time_race)
 end
 
 --[[
 blob storage read/write token
 vtwn_3wlff1nopfeuh8mfbs3ymyd2hkvq
-]]
-
---[[
-want it to be simple.
-call hs input at first
-get the name and reset the cart so that the timer is accurate
-then at the end do x thing
 ]]
