@@ -30,8 +30,11 @@ function fetchData() {
         const splitData = data.match(/.{1,2}/g) || [];
         const rejoinedData = splitData.join("");
 
-        pico8_gpio = splitData;
-        lastValue = rejoinedData;
+        // pico8_gpio = splitData;
+        // lastValue = rejoinedData;
+
+        pico8_gpio = splitGPIOData(data);
+        lastValue = rejoinGPIOData(pico8_gpio);
 
         console.log("GPIO data fetched " + data);
       })
