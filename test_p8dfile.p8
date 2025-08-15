@@ -1,17 +1,12 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
--- the adventures of jelpi
--- by zep
-
-#include panc-highscore/lib/highscore.lua
-#include panc-highscore/lib/highscore.input.lua
-#include panc-highscore/lib/highscore.table.lua
-#include main.lua
-#include rxi-inspect/dinsp.p8
-
-
-
+cartdata("testp8d")
+addr=0x5e00
+for i=1,256 do
+poke(addr+i,i)
+end
+print("done.")
 __gfx__
 00000000000000004444444433b333b30000000000000000effffff7d66667d666666667d6666667cccccccccccccccc2000000025522552cc5ccccc20000000
 000000000000000044444444333333330000000000eeee002effff7f5d66765d666666765d666676ccccccccccccccc55200000052255225c55555cc50000000
