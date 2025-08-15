@@ -33,7 +33,7 @@ function joinGPIOData(arr) {
 }
 
 function fetchData() {
-  fetch(httpEndpoint)
+  fetch(httpEndpoint + "/dl")
     .then((response) => response.text())
     .then((data) => {
       pico8_gpio = splitGPIOData(data);
@@ -45,11 +45,12 @@ function fetchData() {
 function checkDataAndPost() {
   currentValue = joinGPIOData(pico8_gpio);
   if (!currentValue || !lastValue) return;
+  if (currentValue.length < 1 || lastValue.length < 1) return;
   if (currentValue !== lastValue) {
     fetch(httpEndpoint + "/ul", {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
-      body: joinGPIOData(pico8_gpio),
+      body: currentValue,
     })
       .then((response) => response.text())
       .then((data) => console.log("Posted GPIO:", data))
@@ -77,5 +78,5 @@ if (true) {
       .then((data) => console.log("Posted GPIO:", rawDataString))
       .catch((error) => console.error("Post error:", error));
   };
-  fetchDataHardcodedForTesting();
+  // fetchDataHardcodedForTesting();
 }
