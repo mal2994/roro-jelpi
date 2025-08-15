@@ -1,9 +1,10 @@
 // watches GPIO for changes and updates highscore
-// let lastValueGPIO = null;
-let lastValue = null;
-let currentValue = null;
+
 const httpEndpoint =
   "https://mal2994--61f183ca6db311f0af770224a6c84d84.web.val.run";
+
+let lastValue = null;
+let currentValue = null;
 
 function splitGPIOData(str) {
   let decimalValues = [];
@@ -58,11 +59,8 @@ function checkDataAndPost() {
   }
 }
 
-// checkfor changes every 20 seconds
 setInterval(fetchData, 20000);
-fetchData(); // initial fetch
-
-// check for GPIO changes every 500ms
+fetchData();
 setInterval(checkDataAndPost, 500);
 
 if (true) {
