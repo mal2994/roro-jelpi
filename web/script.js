@@ -5,12 +5,11 @@ let currentValue = null;
 const httpEndpoint =
   "https://mal2994--61f183ca6db311f0af770224a6c84d84.web.val.run";
 
-function splitGPIOData(data) {
-  const splitData = data.match(/.{1,2}/g) || [];
-  // const decimalValues = splitData.map((hex) => parseInt(hex, 16));
+function splitGPIOData(str) {
   let decimalValues = [];
-  for (var i = 0; i < splitData.length; i += 4) {
-    for (var j = 3; j >= 0; j--) {
+  const splitData = str.match(/.{1,2}/g) || [];
+  for (let i = 0; i < splitData.length; i += 4) {
+    for (let j = 3; j >= 0; j--) {
       const n = splitData[i + j];
       const h = parseInt(n, 16);
       decimalValues.push(h);
@@ -19,10 +18,16 @@ function splitGPIOData(data) {
   return decimalValues;
 }
 
-function rejoinGPIOData(splitData) {
-  // const rejoinedData = splitData.join("");
-  const hexValues = splitData.map((num) => num.toString(16).padStart(2, "0"))
-    .join("");
+function joinGPIOData(arr) {
+  if (!arr || arr.length === 0) return null;
+  let hexValues = "";
+  for (let i = 0; i < arr.length; i += 4) {
+    for (let j = 3; j >= 0; j--) {
+      const n = arr[i + j];
+      const h = n.toString(16).padStart(2, "0");
+      hexValues += h;
+    }
+  }
   return hexValues;
 }
 
@@ -31,19 +36,19 @@ function fetchData() {
     .then((response) => response.text())
     .then((data) => {
       pico8_gpio = splitGPIOData(data);
-      lastValue = rejoinGPIOData(pico8_gpio);
+      lastValue = joinGPIOData(pico8_gpio);
       console.log("GPIO data fetched " + data);
     }).catch((error) => console.error("Error:", error));
 }
 
 function checkDataAndPost() {
-  currentValue = rejoinGPIOData(pico8_gpio);
+  currentValue = joinGPIOData(pico8_gpio);
   if (!currentValue || !lastValue) return;
   if (currentValue !== lastValue) {
     fetch(httpEndpoint + "/ul", {
       method: "POST",
       headers: { "Content-Type": "text/plain" },
-      body: rejoinGPIOData(pico8_gpio),
+      body: joinGPIOData(pico8_gpio),
     })
       .then((response) => response.text())
       .then((data) => console.log("Posted GPIO:", data))
