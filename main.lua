@@ -89,6 +89,7 @@ function _init()
       if (mget(x, y) == 48) then
         player = make_player(x, y + 1, 1)
         -- player.x = 120 --TODO TEST
+        extcmd("rec")
 
         if (num_players == 2) then
           player2 = make_player(x + 2, y + 1, 1)
@@ -602,6 +603,7 @@ function _update()
   -- if player wins
   if player.x >= 127 then
     if highscore.index(time_race) then
+      extcmd("video")
       game_over_screen = "new record"
     else
       game_over_screen = "show records"

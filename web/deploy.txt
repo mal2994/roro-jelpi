@@ -1,0 +1,8 @@
+1. make sure test steps are commented out in lua
+1. export index.html
+2. manually add <script> to index.html at the end
+3. test
+3. make sure test steps are commented out in js
+4. git commit
+4. deploy
+* if you are doing any testing -- extract the blob and put it in the code so you dont erase all the high scores!
