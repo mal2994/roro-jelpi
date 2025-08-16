@@ -64,7 +64,7 @@ setInterval(fetchData, 20000);
 fetchData();
 setInterval(checkDataAndPost, 500);
 
-if (true) {
+if (false) {
   fetchDataHardcodedForTesting = () => {
     console.log("Using hardcoded GPIO data for testing");
     var rawDataString =
