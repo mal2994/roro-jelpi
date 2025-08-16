@@ -11,6 +11,6 @@ The backend, written in Deno/Hono, is available [on val.town](https://www.val.to
 - GPIO data can be processed externally (e.g., via REST APIs) using the `pico8_gpio` variable.
 - Enables easy syncing of game state across multiple live Pico-8 instances.
 
-This project does not explore syncing directly from IndexedDB, but that approach should also work. More backend solutions for Pico-8 games are encouraged, despite the limitations encountered here.
+This project does not explore syncing directly from the 256-byte cartdata file in IndexedDB, but that approach should also work. More backend solutions for Pico-8 games are encouraged, despite the limitations encountered here.
 
 See [deploy.txt](deploy.txt) for deployment details. 
