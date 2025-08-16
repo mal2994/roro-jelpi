@@ -1,8 +1,15 @@
 1. make sure test steps are commented out in lua
 1. export index.html
-2. manually add <script> to index.html at the end
+1. start a webserver to prevent CORS issues by running `python3 -m http.server`
+2. manually add <script> to index.html at the end (see below snippet)
 3. test
 3. make sure test steps are commented out in js
 4. git commit
 4. deploy
-* if you are doing any testing -- extract the blob and put it in the code so you dont erase all the high scores!
+* if you are doing any testing -- extract the blob first and put it in the code so you dont erase all the high scores!
+
+from step 2:
+```
+<script src="script.js"></script>
+<script src="credits.js"></script>
+```
