@@ -1,0 +1,7 @@
+# JELPI HIGHSCORE MOD
+
+Quick and simple highscore table created by taking Jelpi and adding to it the [highscore table from Lava Joe.](https://github.com/pancelor/pico-8-highscore/tree/main?tab=readme-ov-file) Changed the highscore table in memory location from 0x5e00 (cart data) to 0x5f80 (GPIO data), and then wrote a javascript function to sync the GPIO state to a blob on val.town every few seconds. This method is obviously suffers from various bugs (basic auth, concurrency, etc) but suffices for quick prototypes.
+
+You can find the backend code written in Deno/Hono [on val.town](https://www.val.town/x/Mal2994/jelpi/code/main.tsx). Val.town has size limit preventing pico-8 web export files from being hosted there leading me to rely on github and cloudflare pages for the front-end.
+
+The cool thing about this project, for Pico-8 developers, is the ability to change your cart's persistant state from cartdata to GPIO seamlessly. The only difference being that GPIO is 128 bytes while Cartdata is 256 bytes. GPIO, then, can be more freely processed (REST APIs called, etc) in custom javascript using the `pico8_gpio` variable. Which means you can easily sync game state across multiple live pico-8 instances. What this project doesn't explore, is leaving the cart without modification, and simply taking the syncing straight out of indexeddb - which should work fine in theory. I would like to see more backends created for Pico-8 games, despite whatever limitations we may find in this particular project.
