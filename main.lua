@@ -602,7 +602,9 @@ function _update()
 
   -- if player wins
   if player.x >= 127 then
-    if highscore.index(time_race) then
+    if highscore.index(time_race)
+        -- somehow we are getting negative time...so here's a fix
+        and time_race > 5 then
       extcmd("video")
       game_over_screen = "new record"
     else
@@ -730,7 +732,6 @@ function _draw()
 
   if (death_t > 60) then
     game_over_screen = "show records"
-    -- print_highscore_table()
   else
     print_metrics()
   end
@@ -743,8 +744,3 @@ function print_metrics()
   print("cpu:" .. stat(1))
   print("time:" .. time_race)
 end
-
---[[
-blob storage read/write token
-vtwn_3wlff1nopfeuh8mfbs3ymyd2hkvq
-]]
