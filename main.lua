@@ -605,15 +605,12 @@ function _update()
     if highscore.index(time_race)
         -- somehow we are getting negative time...so here's a fix
         and time_race > 5 then
-      extcmd("video")
       game_over_screen = "new record"
     else
       game_over_screen = "show records"
     end
-    -- print_metrics()
-    -- death_t = 30
-    -- outgame_logic()
-  end -- TODO: call API and post data
+    extcmd("video")
+  end
 end
 
 function draw_sparkle(s)
@@ -667,6 +664,9 @@ function _draw()
   elseif game_over_screen == "show records" then
     cls()
     highscore.table.draw()
+    if not isdead then
+      print("your time: " .. time_race, 0, 0)
+    end
     return
   end
   printh(stat(11))
@@ -732,6 +732,8 @@ function _draw()
 
   if (death_t > 60) then
     game_over_screen = "show records"
+    isdead = true
+    extcmd("video")
   else
     print_metrics()
   end
